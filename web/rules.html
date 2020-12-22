@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>EmojiChess - Rules</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  <script type="text/javascript" src="animals.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"> 
+</head>
+<body onload="init()">
+<div id="container">
+<header>
+EmojiChess - Rules
+</header>
+<main>
+<h1>Rules</h1>
+<p>
+There are two players: &alpha; and &beta;. &alpha; is the player to make the first move.
+Then they alternate in making moves. Two moves are called a full-move. The board is an 
+8x8 board. The square on the bottom left is labeled A1 and the square on the top right is labeled 
+H8. &alpha; starts on ranks 1-2 and &beta; starts on ranks 7-8. The square D5 is on the fifth rank 
+on the D-file. 
+</p>
+<p>
+Both players start with a randomly selected civilization. A player can not have the same civilization
+as the other player. 
+</p>
+<p>
+A player wins by capturing the opponents Tier 3 piece and a player loses by losing their Tier 3 piece. 
+If a player moves a Tier 0 piece to the other side of the board it is promoted to whatever that player's
+civilization's Tier 2 piece is. If a player has only their Tier 3 piece left they lose. It is thus possible
+for a player to win by capturing all the opponent's pieces except the Tier 3 piece. If all the pieces 
+on the board are in the exact same position for the third time then the game ends as a draw. It doesn't 
+matter whose turn it was. If there have been 50 moves without a forward move of a Tier 0 piece or a capture 
+of any piece the game ends in a draw as well. If a player can not make any legal move that player loses 
+the game. 
+</p>
+
+<h2>Available Civilizations</h2>
+<p>
+If one wants to play EmojiChess one needs to learn how each piece can move which requires a bit more 
+effort than regular chess.
+</p>
+<h3>Birds</h3>
+<p>Birds only have 5 different pieces.</p>
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F424;</td><td>V</td><td>0</td><td>Like a pawn.</td><td>Like a pawn.</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F426;</td><td>v</td><td>1</td><td>Like a rook.</td><td>Like a rook.</td><td>3</td></tr>
+<tr><td class="emoji">&#x1F986;</td><td>x</td><td>1</td><td>Like a knight.</td><td>Like a knight</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F54A;</td><td>f</td><td>2</td><td>All 8 directions.</td><td>All 8 directions.</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F99A;</td><td>k</td><td>3</td><td>All 8 directions.</td><td>All 8 directions.</td><td>1</td></tr>
+</table>
+</div>
+<h3>Bugs</h3>
+<p>Bugs have two different Tier 0 pieces one of which can even move sideways. Bugs have 7 different pieces.</p>
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F41C;</td><td>A</td><td>0</td><td>Forward one square to the left <br>Forward one square to the right.</td><td>Forward one square</td><td>1</td>
+<tr><td class="emoji">&#x1F40C;</td><td>S</td><td>0</td><td>One square forward <br>One square left<br>One square right</td><td>Like a pawn.</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F98B;</td><td>B</td><td>1</td><td>Like a rook</td><td>Like a rook</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F577;</td><td>s</td><td>1</td><td>All 8 directions.</td><td>Jump two squares vertical/horizontal</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F982;</td><td>c</td><td>1</td><td>Like a bishop</td><td>Like a bishop</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F997;</td><td>C</td><td>2</td><td>Like a knight<br>Jump four squares vertical/horizontal</td><td>Like a knight</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F41D;</td><td>b</td><td>3</td><td>All 8 directions</td><td>All 8 directions</td><td>2</td></tr>
+</table>
+</div>
+<h3>Smileys</h3>
+<p>Smileys are pretty much based on the standard chess pieces.</p>
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F642;</td><td>P</td><td>0</td><td>Like a pawn</td><td>Like a pawn</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F606;</td><td>N</td><td>1</td><td>Like a knight</td><td>Like a knight</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F910;</td><td>p</td><td>1</td><td>Like a bishop</td><td>Like a bishop</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F610;</td><td>R</td><td>1</td><td>Like a rook</td><td>Like a rook</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F644;</td><td>Q</td><td>2</td><td>Like a queen</td><td>Like a queen</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F928;</td><td>K</td><td>3</td><td>Like a king</td><td>Like a king</td><td>1</td></tr>
+</table>
+</div>
+<h3>People</h3>
+<p>People don't have a rook like piece. The Tier 3 piece however moves like a knight.</p>
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F46E;</td><td>0</td><td>0</td><td>Like a pawn</td><td>Like a pawn</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F575;</td><td>1</td><td>1</td><td>All 8 directions</td><td>All 8 directions</td><td>2</td></tr>
+<tr><td class="emoji">&#x1F477;</td><td>2</td><td>1</td><td>All 8 directions</td><td>Like a bishop</td><td>4</td></tr>
+<tr><td class="emoji">&#x1F482;</td><td>3</td><td>1</td><td>Like a bishop</td><td>Like a bishop</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F9D9;</td><td>4</td><td>2</td><td>Like a knight<br>Like a bishop</td><td>Like a knight<br>Like a bishop</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F9B8;</td><td>5</td><td>3</td><td>Like a knight</td><td>Like a knight</td><td>1</td></tr>
+</table>
+</div>
+<h3>Clothes</h3>
+<p>Clothes have only 4 different pieces. They have no bishop or rook like pieces but 
+as a compensation the Tier 3 piece moves like a queen. </p>
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F45F;</td><td>l</td><td>0</td><td>Like a pawn</td><td>Like a pawn</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F97E;</td><td>m</td><td>1</td><td>Like a knight</td><td>Like a knight</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F452;</td><td>o</td><td>2</td><td>All 8 directions</td><td>All 8 directions</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F3A9;</td><td>g</td><td>3</td><td>All 8 directions</td><td>All 8 directions</td><td>8</td></tr>
+</table>
+</div>
+<h3>Vehicles</h3>
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F69C;</td><td>T</td><td>0</td><td>Like a pawn</td><td>Like a pawn</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F69A;</td><td>O</td><td>1</td><td>Like a rook</td><td>Like a bishop</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F695;</td><td>F</td><td>1</td><td>Like a bishop</td><td>Like a rook</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F690;</td><td>#</td><td>1</td><td>Like a knight<br>All 8 directions</td><td>Like a knight<br>All 8 directions</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F693;</td><td>@</td><td>2</td><td>Like a rook</td><td>Like a rook</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F692;</td><td>|</td><td>3</td><td>All 8 directions</td><td>All 8 directions</td><td>1</td></tr>
+</table>
+</div>
+
+<h2>Motivation</h2>
+
+<p>
+The motivation behind all this is pretty much the same as for other chess variants. 
+Chess focuses a great deal on studying openings and lines which is both good and bad. 
+It can sometimes feel a bit repetitive once you've gone for the 420th Ruy Lopez. EmojiChess
+has 6 (active) civilizations which amounts to 30 combinations... times two for the sides so 
+there's 60 different starting positions. But to still discourage people from just memorizing
+lines forever each year 6 civilizations from a pool of civilizations are selected at random 
+to be played for that year.  
+</p>
+
+<h2>Competition Rules</h2>
+
+<p>
+A competition period is 12 months long. Before each game each player can
+(but doesn't have to) ban one civilization. Then the players will get asigned
+a randomly selected civilizations from the remaining 4 civilizations. This is also to account for 
+potential imbalances between civilizations. 
+</p>
+
+<h2>Unavailable Civilizations</h2>
+
+<h3>Smileys2</h3>
+<p>Smileys2 have two powerful Tier 1 pieces but a weak Tier 2 piece and instead of 6 Tier 1 pieces 
+they have 4 Tier 1 pieces and 10 Tier 0 pieces.</p>
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F922;</td><td>y</td><td>0</td><td>Like a pawn</td><td>Like a pawn</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F975;</td><td>u</td><td>1</td><td>Horizontal<br>Diagonal</td><td>Horizontal<br>Diagonal</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F976;</td><td>G</td><td>1</td><td>Vertical<br>Diagonal</td><td>Vertical<br>Diagonal</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F631;</td><td>E</td><td>2</td><td>All 8 directions</td><td>All 8 directions</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F92C;</td><td>e</td><td>3</td><td>Like a rook</td><td>Like a bishop</td><td>1</td></tr>
+</table>
+</div>
+
+<h3>Sounds</h3>
+<p>Sounds have no rook or bishop like pieces but a knight-like piece that can jump one square farther.
+The Tier 3 piece has a bit more range.</p>
+
+<div class="overflow">
+<table class="rule">
+<tr><td>Emoji</td><td>ASCII</td><td>Tier</td><td>Move</td><td>Capture</td><td>Range</td></tr>
+<tr><td class="emoji">&#x1F508;</td><td>U</td><td>0</td><td>Like a pawn</td><td>Like a pawn</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F4E2;</td><td>W</td><td>1</td><td>Jumps like a knight except 3 squares<br>instead of 2</td><td>Jumps like a knight except 3 squares<br>instead of 2</td><td>1</td></tr>
+<tr><td class="emoji">&#x1F4EF;</td><td>X</td><td>2</td><td>All 8 directions</td><td>All 8 directions</td><td>8</td></tr>
+<tr><td class="emoji">&#x1F514;</td><td>L</td><td>3</td><td>All 8 directions</td><td>All 8 directions</td><td>3</td></tr>
+</table>
+</div>
+
+</main>
+</div>
+</body>
+</html>
