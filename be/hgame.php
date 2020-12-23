@@ -42,7 +42,7 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
   // Now insert the move 
   $stmt = $db->prepare("INSERT INTO MOVES(gid, uid, civ, fx, fy, tx, ty) ".
                        "VALUES(:gid, :uid, :civ, :fx, :fy, :tx, :ty)");
-  $stmt->bindParam(":gid", $result['id'], PDO::PARAM_INT);
+  $stmt->bindParam(":gid", $game['id'], PDO::PARAM_INT);
   $stmt->bindParam(":uid", $uid, PDO::PARAM_INT);
   $stmt->bindParam(":civ", $civ, PDO::PARAM_STR);
   $stmt->bindParam(":fx", $fx, PDO::PARAM_INT);
@@ -54,12 +54,12 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
   
   // Update the board in the game
   $stmt = $db->prepare("UPDATE games SET board = :board, result = :result WHERE id = :gid");
-  $stmt->bindParam(":board", $board);
-  $stmt->bindParam(":result", $next);
-  $stmt->bindParam(":gid", $result['id']);
+  $stmt->bindParam(":board", $board, PDO::PARAM_STR);
+  $stmt->bindParam(":result", $next, PDO::PARAM_STR);
+  $stmt->bindParam(":gid", $game['id'], PDO::PARAM_INT);
   $stmt->execute();
   
-  return array("err"=>0);
+  return array("err"=>0,"board"=>$board);
 }
 
 function hGameMove($d, $uid, $db) {
@@ -119,10 +119,12 @@ function hGameMove($d, $uid, $db) {
     else {
       $retval = array("err"=>404);
     }
+    
+    $db->commit();
   }
   catch(PDOException $ex) {
     $db->rollback();
-    return array("err"=>"database error");
+    return array("err"=>"database error: ".$ex);
   }
   
   return $retv;
@@ -249,17 +251,17 @@ SQL
     if ($result['result'] == 'c')
       // INFO: If the game is still a challenge and not running then we MUST NOT
       //       spoil the civs - thus we set them to "?"
-      $retv = array("gid"=>$result['id'],"alpha"=>$result['alpha'],"beta"=>$result['beta'],
+      $retv = array("gid"=>intval($result['id']),"alpha"=>$result['alpha'],"beta"=>$result['beta'],
                    "created_on"=>$result['created_on'],"result"=>$result['result'],
                    "alpha_civ"=>"?","beta_civ"=>"?","alpha_id"=>$result['alpha_id'],
                    "beta_id"=>$result['beta_id']);
     else {
-      $turn_id = 0;
+      $turn_uid = 0;
       
       if ($result['result'] == 'a') {
-        $turn_id = $result['alpha_id'];
+        $turn_uid = $result['alpha_id'];
         
-        if ($turn_id == $uid) {
+        if ($turn_uid == $uid) {
           // It's the pollers turn!
           // That means we gotta set the poll time for that player!
           $stmt = $db->prepare("UPDATE games SET poll_alpha = CURRENT_TIMESTAMP, ".
@@ -270,9 +272,9 @@ SQL
       }
       
       if ($result['result'] == 'b') {
-        $turn_id = $result['beta_id'];
+        $turn_uid = $result['beta_id'];
         
-        if ($turn_id == $uid) {
+        if ($turn_uid == $uid) {
           // It's the pollers turn!
           // That means we gotta set the poll time for that player!
           $stmt = $db->prepare("UPDATE games SET poll_beta = CURRENT_TIMESTAMP, ".
@@ -282,11 +284,11 @@ SQL
         }
       }
       
-      $retv =  array("gid"=>$result['id'],"alpha"=>$result['alpha'],"beta"=>$result['beta'],
+      $retv =  array("gid"=>intval($result['id']),"alpha"=>$result['alpha'],"beta"=>$result['beta'],
                    "created_on"=>$result['created_on'],"alpha_civ"=>$result['alpha_civ'],
                    "beta_civ"=>$result['beta_civ'],"board"=>$result['board'],"result"=>$result['result'],
-                   "alpha_id"=>$result['alpha_id'],"beta_id"=>$result['beta_id'],
-                   "turn_id"=>$turn_id,"poll_alpha"=>$result['poll_alpha'],"poll_beta"=>$result['poll_beta']);
+                   "alpha_id"=>intval($result['alpha_id']),"beta_id"=>intval($result['beta_id']),
+                   "turn_uid"=>intval($turn_uid),"poll_alpha"=>$result['poll_alpha'],"poll_beta"=>$result['poll_beta']);
     }
   }
   catch(PDOException $ex) {

@@ -1,5 +1,10 @@
-var G_GID = 4;
-var G_MY_UID = -1;
+var G_GID = 4; // The ID of the game
+var G_MY_UID = -1; // Our UID
+var G_MOVE_ENABLED = false; // Whether the player can make a move
+var G_SELECTION = undefined;
+var G_ALPHA_CIV = undefined;
+var G_BETA_CIV = undefined;
+var G_BOARD = undefined;
 
 function init() {
   // Which game?
@@ -32,21 +37,66 @@ function boardTo2D(b1d) {
   return board;
 }
 
-function updateBoardDisplay(game) {
-  G_MY_UID = parseInt(game['uid']);
+function clicked(y, x) {
+  if (!G_MOVE_ENABLED) {
+    alert("It is not your turn!");
+    return false;
+  }
+  
+  if (G_SELECTION == undefined) {
+    G_SELECTION = [y,x];
+  } else {
+    if (G_SELECTION[0] == y && G_SELECTION[1] == x) {
+      G_SELECTION = undefined;
+    } else {
+      playerMove(G_SELECTION[0], G_SELECTION[1], y, x);
+      G_SELECTION = undefined;
+    }
+  }
   
   document.getElementById("board").innerHTML = 
-    renderBoardTable(boardTo2D(game['board']), game['alpha_civ'], game['beta_civ'], 
-                     undefined, undefined);
+    renderBoardTable(G_BOARD, G_ALPHA_CIV, G_BETA_CIV);
+  
+  return false;
+}
+
+function playerMove(fy, fx, ty, tx) {
+  ecApi.go({"p":"game","a":"move","d":{"gid":G_GID,"from":{"x":fx,"y":fy},"to":{"x":tx,"y":ty}}});
+}
+
+function updateBoardDisplay(game) {
+  G_MY_UID = parseInt(game['uid']);
+  G_ALPHA_CIV = game['alpha_civ'];
+  G_BETA_CIV = game['beta_civ'];
+  G_BOARD = boardTo2D(game['board']);
+  
+  document.getElementById("board").innerHTML = 
+    renderBoardTable(G_BOARD, G_ALPHA_CIV, G_BETA_CIV);
                      
   if (game['alpha'] == null)
     game['alpha'] = '?';
   
   if (game['beta'] == null)
     game['beta'] =  '?';
-                     
-  document.getElementById("alpha_plr").innerText = game['alpha'];
-  document.getElementById("beta_plr").innerText = game['beta'];
+  
+  if (game['turn_uid'] == game['uid']) {
+    G_MOVE_ENABLED = true;
+  }
+  
+  
+  
+  var alpha_sfx = "";
+  var beta_sfx = "";
+  
+  if (G_MOVE_ENABLED && game['uid'] == game['alpha_id']) {
+    alpha_sfx = " !!";
+  }
+  if (G_MOVE_ENABLED && game['uid'] == game['beta_id']) {
+    beta_sfx = " !!";
+  }
+  
+  document.getElementById("alpha_plr").innerText = game['alpha'] + alpha_sfx;
+  document.getElementById("beta_plr").innerText = game['beta'] + beta_sfx;
 }
 
 var ecApi = {
@@ -181,8 +231,8 @@ function renderBoardTable(b2d, alpha_civ, beta_civ, last_alpha, last_beta) {
         }
       }
       
-      if (last_alpha != undefined)
-        if (y == last_alpha[0] && x == last_alpha[1]) {
+      if (G_SELECTION != undefined)
+        if (y == G_SELECTION[0] && x == G_SELECTION[1]) {
           bg += ' selected';
         }
       
