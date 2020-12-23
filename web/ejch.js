@@ -5,6 +5,7 @@ var G_SELECTION = undefined;
 var G_ALPHA_CIV = undefined;
 var G_BETA_CIV = undefined;
 var G_BOARD = undefined;
+var G_LAST_MOVE = undefined;
 
 function init() {
   // Which game?
@@ -61,7 +62,50 @@ function clicked(y, x) {
 }
 
 function playerMove(fy, fx, ty, tx) {
-  ecApi.go({"p":"game","a":"move","d":{"gid":G_GID,"from":{"x":fx,"y":fy},"to":{"x":tx,"y":ty}}});
+  G_MOVE_ENABLED = false;
+  
+  // Send move to server
+  ecApi.go({"p":"game","a":"move","d":{"gid":G_GID,"from":{"x":fx,"y":fy},"to":{"x":tx,"y":ty}}},
+    updateBoardPlayerMove,
+    alert
+  );
+  
+  // And start polling
+  startPoll();
+}
+
+function startPoll() {
+  setTimeout(function(){doPoll();}, 4000 + Math.floor(Math.random()*4000));
+}
+
+function doPoll() {
+  ecApi.go({"p":"game","a":"get","d":{"gid":G_GID}}, handlePoll, alert);
+}
+
+function handlePoll(game) {
+  // is it our turn yet?
+  G_BOARD = boardTo2D(game['board']);
+  G_LAST_MOVE = [game['last_move']['ty'],
+                 game['last_move']['tx'],
+                 game['last_move']['fy'],
+                 game['last_move']['fx']];
+  
+  if (game['turn_uid'] == game['uid']) {
+    document.getElementById("board").innerHTML = 
+    renderBoardTable(G_BOARD, G_ALPHA_CIV, G_BETA_CIV);
+    G_MOVE_ENABLED = true;
+  } else {
+    setTimeout(function(){doPoll();}, 4000 + Math.floor(Math.random()*4000));
+  }
+}
+
+function updateBoardPlayerMove(reply) {
+  G_BOARD = boardTo2D(reply['board']);
+  
+  document.getElementById("board").innerHTML = 
+    renderBoardTable(G_BOARD, G_ALPHA_CIV, G_BETA_CIV);
+    
+  G_MOVE_ENABLED = false;
 }
 
 function updateBoardDisplay(game) {
@@ -101,7 +145,7 @@ function updateBoardDisplay(game) {
 
 var ecApi = {
 'log': function(data) {
-  document.getElementById("ecapi-console").innerText += data + "\n";
+  console.log(data);
 },
 'go' : function (payload, cb_ok, cb_err) {
     const xhr = new XMLHttpRequest();
@@ -236,11 +280,11 @@ function renderBoardTable(b2d, alpha_civ, beta_civ, last_alpha, last_beta) {
           bg += ' selected';
         }
       
-      if (last_beta != undefined) {
-        if (last_beta[0] == y && last_beta[1] == x)
+      if (G_LAST_MOVE != undefined) {
+        if (G_LAST_MOVE[0] == y && G_LAST_MOVE[1] == x)
           bg += ' lastbeta';
         
-        if (last_beta[2] == y && last_beta[3] == x)
+        if (G_LAST_MOVE[2] == y && G_LAST_MOVE[3] == x)
           bg += ' lastbetaorg';
       }
       

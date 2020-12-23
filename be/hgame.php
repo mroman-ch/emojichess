@@ -53,10 +53,16 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
   $stmt->execute();
   
   // Update the board in the game
-  $stmt = $db->prepare("UPDATE games SET board = :board, result = :result WHERE id = :gid");
+  $stmt = $db->prepare("UPDATE games SET board = :board, result = :result, ".
+                       "last_fx = :fx, last_fy = :fy, last_tx = :tx, last_ty = :ty ".
+                       "WHERE id = :gid");
   $stmt->bindParam(":board", $board, PDO::PARAM_STR);
   $stmt->bindParam(":result", $next, PDO::PARAM_STR);
-  $stmt->bindParam(":gid", $game['id'], PDO::PARAM_INT);
+  $stmt->bindParam(":gid", intval($game['id']), PDO::PARAM_INT);
+  $stmt->bindParam(":fx", $fx, PDO::PARAM_INT);
+  $stmt->bindParam(":fy", $fy, PDO::PARAM_INT);
+  $stmt->bindParam(":tx", $tx, PDO::PARAM_INT);
+  $stmt->bindParam(":ty", $ty, PDO::PARAM_INT);
   $stmt->execute();
   
   return array("err"=>0,"board"=>$board);
@@ -226,7 +232,11 @@ SELECT
   p1.id AS alpha_id,
   p2.id AS beta_id,
   g1.poll_alpha AS poll_alpha,
-  g1.poll_beta AS poll_beta
+  g1.poll_beta AS poll_beta,
+  g1.last_fx AS last_fx,
+  g1.last_fy AS last_fy,
+  g1.last_tx AS last_tx,
+  g1.last_ty AS last_ty
 FROM
   `games` g1
 LEFT JOIN PROFILES
@@ -288,7 +298,11 @@ SQL
                    "created_on"=>$result['created_on'],"alpha_civ"=>$result['alpha_civ'],
                    "beta_civ"=>$result['beta_civ'],"board"=>$result['board'],"result"=>$result['result'],
                    "alpha_id"=>intval($result['alpha_id']),"beta_id"=>intval($result['beta_id']),
-                   "turn_uid"=>intval($turn_uid),"poll_alpha"=>$result['poll_alpha'],"poll_beta"=>$result['poll_beta']);
+                   "turn_uid"=>intval($turn_uid),"poll_alpha"=>$result['poll_alpha'],"poll_beta"=>$result['poll_beta'],
+                   "last_move"=>array("fx"=>intval($result['last_fx']),
+                                      "fy"=>intval($result['last_fy']),
+                                      "tx"=>intval($result['last_tx']),
+                                      "ty"=>intval($result['last_ty'])));
     }
   }
   catch(PDOException $ex) {
