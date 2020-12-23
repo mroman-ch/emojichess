@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>EmojiChess</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  <script type="text/javascript" src="stuckfish.js"></script>
+  <script type="text/javascript" src="ejch.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"> 
+</head>
+<body onload="init()">
+<div id="container">
+<header>
+EmojiChess
+</header>
+<main>
+<div id="beta" class="plr">
+<span style="color: cornflowerblue"><span id="beta_plr"></span></span>
+</div>
+<div id="board">
+</div>
+<div id="alpha" class="plr">
+<span style="color: salmon"><span id="alpha_plr"></span></span>
+</div>
+<pre id="ecapi-console"></pre>
+<br><br>
+<b>ECAPI-KEY:</b> <input type="text" id="ecapi-key" /> <button onclick="localStorage.setItem('ecapi-key', document.getElementById('ecapi-key').value); return false;">Set!</button>
+</div>
+</body>
+</html>

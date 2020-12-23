@@ -125,3 +125,8 @@ td.lastbeta {
 td.lastbetaorg {
   background-color: #444499;
 }
+
+pre {
+  white-space: pre-wrap;
+  overflow: auto;
+}

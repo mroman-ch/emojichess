@@ -541,6 +541,7 @@ function analyse (b2d, alpha_civ, beta_civ) {
       var ix = y*8 + x;
       var piece = b2d[y][x];
       
+      
       if (piece == ' ')
         continue;
       

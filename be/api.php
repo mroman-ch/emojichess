@@ -50,8 +50,11 @@ if (!isset($request['a'])) {
 
 $uid = 0;
 
-if (isset($request['k'])) {
-  $uid = intval($request['k']);
+if (isset($request['ecapi-key'])) {
+  if ($request['ecapi-key'] == 'abcd-efgh-ijkl-mnop')
+    $uid = 1;
+  if ($request['ecapi-key'] == '1234-5678-1234-5678')
+    $uid = 2;
 }
 
 if (!isset($request['d'])) {
@@ -68,6 +71,12 @@ if (!isset($G_HANDLERS[$p])) {
 }
 
 $obj = call_user_func_array($G_HANDLERS[$p], array($a, $request['d'], $uid, $dbConnection));
+
+if (!isset($obj['err']))
+  $obj['err'] = 0;
+
+$obj['uid'] = $uid;
+
 echo json_encode($obj);
 exit(0);
 
