@@ -126,6 +126,14 @@ td.lastbetaorg {
   background-color: #444499;
 }
 
+td.lastmove {
+  background-color: #44FF44;
+}
+
+td.lastmoveorg {
+  background-color: #449944;
+}
+
 pre {
   white-space: pre-wrap;
   overflow: auto;

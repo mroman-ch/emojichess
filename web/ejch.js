@@ -100,6 +100,11 @@ function handlePoll(game) {
 }
 
 function updateBoardPlayerMove(reply) {
+  if (reply['err'] == 69) {
+    G_MOVE_ENABLED = true;
+    return false; // was rejected as illegal move by the server. 
+  }
+  
   G_BOARD = boardTo2D(reply['board']);
   
   document.getElementById("board").innerHTML = 
@@ -282,10 +287,10 @@ function renderBoardTable(b2d, alpha_civ, beta_civ, last_alpha, last_beta) {
       
       if (G_LAST_MOVE != undefined) {
         if (G_LAST_MOVE[0] == y && G_LAST_MOVE[1] == x)
-          bg += ' lastbeta';
+          bg += ' lastmove';
         
         if (G_LAST_MOVE[2] == y && G_LAST_MOVE[3] == x)
-          bg += ' lastbetaorg';
+          bg += ' lastmoveorg';
       }
       
       r += '<td onclick="clicked(' + y +',' + x + '); return false;" class="piece ' + bg + '" id="p_' + (y*8+x) + '">';
