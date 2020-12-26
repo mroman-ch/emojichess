@@ -4,7 +4,7 @@
   <title>EmojiChess - Lobby</title>
   <link rel="stylesheet" href="stylesheet.css">
   <script type="text/javascript" src="ecapi.js"></script>
-  <script type="text/javascript" src="lobby.js"></script>
+  <script type="text/javascript" src="games.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -13,11 +13,23 @@
 <body onload="init()">
 <div id="container">
 <header>
-Lobby
+Games
 </header>
 <main>
-<div id="lobby">
+<div class="title">
+Open Challenges
 </div>
-<button onclick="newGame()">Create Game</button>
+<div id="challenges">
+</div>
+<div class="title">
+Current Games
+</div>
+<div id="current-games">
+</div>
+<div class="title">
+Completed Games
+</div>
+<div id="games">
+</div>
 </body>
 </html>

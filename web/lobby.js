@@ -22,7 +22,11 @@ function join(gid) {
 
 function joinSuccess(reply) {
   if (reply['err'] != 0) {
-    alert("There was an error: " + reply[err]);
+    if (reply['err'] == 403) {
+      alert("You can not join this game. Maybe it's because you're already in it!");
+      return false;
+    }
+    alert("There was an error: " + reply['err']);
     return false;
   }
   
