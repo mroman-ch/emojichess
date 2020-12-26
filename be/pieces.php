@@ -372,4 +372,34 @@ $CIVSTARTS = array(
   "smileys2"=> array($SMILEYS2_START_0, $SMILEYS2_START_1),
 );
 
+function fillBoardCiv($b1d, $civ, $alpha) {
+  global $CIVSTARTS;
+  
+  $START_1 = $CIVSTARTS[$civ][1];
+  $START_0 = $CIVSTARTS[$civ][0];
+  
+ 
+  
+  if ($alpha) {
+    for($x = 0; $x < 8; $x++) {
+      
+      $idx1 = 6*8 + $x;
+      $idx0 = 7*8 + $x;
+      
+      $b1d[$idx1] = $START_1[$x];
+      $b1d[$idx0] = $START_0[$x];
+    }
+  } else {
+    for($x = 0; $x < 8; $x++) {
+      $idx1 = 1*8 + $x;
+      $idx0 = 0*8 + $x;
+      
+      $b1d[$idx1] = $START_1[$x];
+      $b1d[$idx0] = $START_0[$x];
+    }
+  }
+  
+  return $b1d;
+}
+
 ?>

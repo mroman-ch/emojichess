@@ -6,6 +6,8 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 header('Content-Type: application/json');
 
+require_once("pieces.php");
+
 $dbConnection = null;
 
 function hDefault($a, $uid, $dbConnection) {

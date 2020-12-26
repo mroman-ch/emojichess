@@ -452,9 +452,9 @@ function analyse (b2d, alpha_civ, beta_civ) {
       for(var i = 0; i < ptrn_move.length; i++) {
         if (tier == 0) {
           if (civ == alpha_civ && y == 6)
-            range = 2;
+            range *= 2;
           if (civ == beta_civ && y == 1)
-            range = 2;
+            range *= 2;
         }
         
         for(var dr = 1; dr <= range; dr++) {
