@@ -10,7 +10,10 @@ function showOpenChallenges(reply) {
   var s = '<table class="rule">';
   s += '<tr><td>GID</td><td>Opponent</td><td></td></tr>';
   for(var game of reply['games']) {
-    s += "<tr><td>" + game['gid'] + '</td><td>' + game['opponent'] + '</td><td><a href="#" onclick="join(' + game['gid'] + '); return false;">Join</a></td></tr>';
+    if (game['opponent_id'] != reply['uid'])
+      s += "<tr><td>" + game['gid'] + '</td><td>' + game['opponent'] + '</td><td><a href="#" onclick="join(' + game['gid'] + '); return false;">Join</a></td></tr>';
+    else 
+      s += "<tr><td>" + game['gid'] + '</td><td>' + game['opponent'] + '</td><td>&nbsp;</td></tr>';
   }
   s += "</table>";
   document.getElementById("lobby").innerHTML = s;

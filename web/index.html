@@ -3,37 +3,31 @@
 <head>
   <title>EmojiChess</title>
   <link rel="stylesheet" href="stylesheet.css">
-  <script type="text/javascript" src="stuckfish.js"></script>
-  <script type="text/javascript" src="emojichess.js"></script>
+  <script type="text/javascript" src="ecapi.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"> 
 </head>
-<body onload="init()">
+<body onload="defaultInit(); ">
 <div id="container">
 <header>
 EmojiChess
 </header>
 <main>
-<div id="alpha" class="plr">
-<span style="color: cornflowerblue">&beta;: Stuckfish 0.1 {Engine} (Elo: 69)</span>
+<div id="nav"></div>
+<div id="profile-link"></div>
+<div class="center-center">
+<button onclick="window.location.href='lobby.html'; return false;" class="big">Lobby</button>
+<button class="big">Login</button>
+<button class="big">Sign Up</button>
+<button onclick="window.location.href='train.html'; return false;" class="big">Train</button>
 </div>
-<div id="board">
-</div>
-<div id="beta" class="plr">
-<span style="color: salmon">&alpha;: You {Human} (Elo: ?)</span>
-</div>
-<h1>Rules</h1>
-<p>Please <a href="rules.html">Read this!</a></p>
-</main>
-<h1>News</h1>
 <p>
-<b>2020-12-22</b>: * Changed evaluation function to wheigh Tier 3 pieces more. <br>
-This should make some easy wins impossible. Before this change Stuckfish would not protect
-the Tier 3 piece if attacked by a Tier 3 piece. Now at Stuckfish 0.1.<br><br>
-<b>2020-12-22</b>: * Updated Rules<br><br>
+EmojiChess is a Chess-based board game. Click on "Train" if you'd like to train against the engine.
+Head to the "Lobby" to play against other people. 
 </p>
+</main>
 </div>
 </body>
 </html>
