@@ -54,9 +54,9 @@ SELECT
   g1.last_ty AS last_ty
 FROM
   `games` g1
-LEFT JOIN PROFILES
+LEFT JOIN profiles
   p1 ON p1.id = g1.alpha
-LEFT JOIN PROFILES
+LEFT JOIN profiles
   p2 ON p2.id = g1.beta
 WHERE g1.result = 'c'
 ORDER BY g1.created_on ASC
@@ -130,12 +130,12 @@ SELECT
   g1.last_ty AS last_ty
 FROM
   `games` g1
-LEFT JOIN PROFILES
+LEFT JOIN profiles
   p1 ON p1.id = g1.alpha
-LEFT JOIN PROFILES
+LEFT JOIN profiles
   p2 ON p2.id = g1.beta
 WHERE (p1.id = :usrid OR p2.id = :usrid)
-  AND (g1.result = 'v' OR g1.result = 'V')
+  AND (g1.result = 'v' OR g1.result = 'V' OR g1.result = 'D')
 ORDER BY g1.created_on DESC
 LIMIT 12
 SQL
@@ -198,9 +198,9 @@ SELECT
   g1.last_ty AS last_ty
 FROM
   `games` g1
-LEFT JOIN PROFILES
+LEFT JOIN profiles
   p1 ON p1.id = g1.alpha
-LEFT JOIN PROFILES
+LEFT JOIN profiles
   p2 ON p2.id = g1.beta
 WHERE (p1.id = :usrid OR p2.id = :usrid)
   AND (g1.result != 'v' AND g1.result != 'V')
@@ -269,7 +269,7 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
   $pieceRange = $PIECE_RANGE[$piece];
   
   if ($pieceCiv != $civ) {
-    return array("err"=>"Trying to move an opponent's piece!");
+    return array("err"=>403,"reason"=>"Trying to move an opponent's piece!");
   }
   
   $moveValid = false;
@@ -278,7 +278,16 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
   if ($board[$tidx] == ' ') { // Move to empty square 
   
     for($i = 0; $i < count($pieceMovePattern); $i++) {
-      for($d = 1; $d <= $pieceRange; $d++) {
+      $pieceRange_ = $pieceRange;
+      
+      if ($pieceTier == 0) {
+        if ($pieceCiv == $game['alpha_civ'] && $fy == 6)
+          $pieceRange_ = 2 * $pieceRange;
+        if ($pieceCiv == $game['beta_civ'] && $fy == 1)
+          $pieceRange_ = 2 * $pieceRange;
+      }
+      
+      for($d = 1; $d <= $pieceRange_; $d++) {
         
         $px = $pieceMovePattern[$i][0];
         $py = $pieceMovePattern[$i][1];
@@ -313,10 +322,23 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
     }
   } else { // Capture
     
-    for($i = 0; $i < count($pieceMovePattern); $i++) {
-      for($d = 0; $d < $pieceRange; $d++) {
-        $sx = $pieceCapPattern[$i][0]*$d + $fx;
-        $sy = $pieceCapPattern[$i][1]*$d + $fy;
+    for($i = 0; $i < count($pieceCapPattern); $i++) {
+      for($d = 1; $d <= $pieceRange; $d++) {
+        $px = $pieceCapPattern[$i][0];
+        $py = $pieceCapPattern[$i][1];
+        
+        if ($pieceTier == 0) {
+          if ($pieceCiv == $game['alpha_civ']) {
+            $py *= -1;
+          }
+        }
+        
+        $sx = $px*$d + $fx;
+        $sy = $py*$d + $fy;
+        
+        if ($sx < 0 || $sx >= 8 || $sy < 0 || $sy >= 8)
+          break; // out of board
+        
         
         $sidx = $sy*8 + $sx;
         
@@ -325,7 +347,7 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
           $pieceCiv_ = $PIECE_CIV[$board[$sidx]];
           
           if ($pieceCiv_ == $pieceCiv) { // can't capture own pieces
-            $reason .= "Can't capture own pieces";
+            $reason .= "Can't capture own pieces:".$pieceCiv_." ".$sy.",".$sx;
             break;
           } else {
             if ($sx == $tx && $sy == $ty) {
@@ -347,6 +369,16 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
   
   $board[$tidx] = $board[$fidx];
   $board[$fidx] = ' ';
+  
+  global $PROMOTIONS;
+  
+  // Promote
+  if ($civ == $game['alpha_civ'] && $ty == 0 && $pieceTier == 0) {
+    $board[$tidx] = $PROMOTIONS[$civ];
+  }
+   if ($civ == $game['beta_civ'] && $ty == 7 && $pieceTier == 0) {
+    $board[$tidx] = $PROMOTIONS[$civ];
+  }
   
   // Now insert the move 
   $stmt = $db->prepare("INSERT INTO MOVES(gid, uid, civ, fx, fy, tx, ty, board) ".
@@ -386,6 +418,33 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
       $next = 'v';
     else if ($civ == $game['alpha_civ'])
       $next = 'V';
+  }
+
+  $stmt = $db->prepare("SELECT COUNT(id) AS c FROM moves WHERE gid = :gid AND board = :board");
+  $stmt->bindParam(":gid", intval($game['id']), PDO::PARAM_INT);
+  $stmt->bindParam(":board", $board, PDO::PARAM_STR);
+  $stmt->execute();
+  
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+  if ($row !== FALSE) {
+    if (intval($row['c']) >= 3) { // Repeated for the third time 
+      $next = 'D'; // set to draw
+    }
+  }
+  
+  $stmt = $db->prepare("SELECT COUNT(id) AS c FROM moves WHERE gid = :gid");
+  $stmt->bindParam(":gid", intval($game['id']), PDO::PARAM_INT);
+  $stmt->execute();
+  
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+  if ($row !== FALSE) {
+    if (intval($row['c'] >= 200)) {
+      if ($next != 'v' && $next != 'V') {
+        $next = 'D'; // draw after 100 full moves.
+      }
+    }
   }
   
   // Update the board in the game

@@ -24,6 +24,11 @@ function showGames(reply) {
       alcls = "loser";
     }
     
+    if (game['result'] == 'D') {
+      alcls = 'draw';
+      btcls = 'draw';
+    }
+    
     s += '<td class="'+alcls+'">' + game['alpha'] + '</td><td class="'+btcls+'">' + game['beta'] + '</td></tr>';
   }
   
