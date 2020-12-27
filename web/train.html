@@ -3,6 +3,7 @@
 <head>
   <title>EmojiChess</title>
   <link rel="stylesheet" href="stylesheet.css">
+  <script type="text/javascript" src="ecapi.js"></script>
   <script type="text/javascript" src="stuckfish.js"></script>
   <script type="text/javascript" src="emojichess.js"></script>
   <meta charset="UTF-8">
@@ -10,12 +11,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"> 
 </head>
-<body onload="init()">
+<body onload="defaultInit(); init();">
 <div id="container">
 <header>
 EmojiChess
 </header>
 <main>
+<div id="nav"></div>
 <div id="alpha" class="plr">
 <span style="color: cornflowerblue">&beta;: Stuckfish 0.1 {Engine} (Elo: 69)</span>
 </div>

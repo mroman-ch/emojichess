@@ -11,12 +11,13 @@ require_once("pieces.php");
 $dbConnection = null;
 
 function hDefault($a, $uid, $dbConnection) {
-  return array("err"=>"default");
+  return array("uid"=>$uid);
 }
 
 $G_HANDLERS = array("default"=>"hDefault");
 
 require_once('hgame.php');
+require_once('hprofile.php');
 
 $CFG_DBO_CONNECTION_STRING = 'mysql:host=localhost;dbname=web55';
 $CFG_DBO_CONNECTION_USER = 'web55_';
@@ -52,11 +53,21 @@ if (!isset($request['a'])) {
 
 $uid = 0;
 
-if (isset($request['ecapi-key'])) {
-  if ($request['ecapi-key'] == 'abcd-efgh-ijkl-mnop')
-    $uid = 1;
-  if ($request['ecapi-key'] == '1234-5678-1234-5678')
-    $uid = 2;
+try {
+  $dbConnection->beginTransaction();
+  $stmt = $dbConnection->prepare("SELECT * FROM tokens WHERE token = :key");
+  $stmt->bindParam(":key", $request['ecapi-key'], PDO::PARAM_STR);
+  $stmt->execute();
+  
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+  if ($row !== FALSE) {
+    $uid = intval($row['uid']);
+  }
+  $dbConnection->commit();
+}
+catch(PDOException $ex) {
+  $dbConnection->rollback();
 }
 
 if (!isset($request['d'])) {

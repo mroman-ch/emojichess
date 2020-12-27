@@ -20,6 +20,9 @@ function hGame($a, $d, $uid, $db) {
   if ($a == 'list') {
     return hGameList($d, $uid, $db);
   }
+  if ($a == 'list2') {
+    return hGameList2($d, $uid, $db);
+  }
   if ($a == 'lobby') {
     return hGameLobby($d, $uid, $db);
   }
@@ -98,8 +101,9 @@ SQL
 }
 
 function hGameList($d, $uid, $db) {
-  if (!isset($d['usrid']))
-    return array("err"=>"`usrid` missing!");
+  if (!isset($d['uid'])) {
+    $d['uid'] = $uid;
+  }
   
   $retv = NULL;
   
@@ -136,7 +140,7 @@ ORDER BY g1.created_on DESC
 LIMIT 12
 SQL
     );
-    $stmt->bindParam(":usrid", intval($d['usrid']), PDO::PARAM_INT);
+    $stmt->bindParam(":usrid", intval($d['uid']), PDO::PARAM_INT);
     $stmt->execute();
     
     $rows = array();
@@ -147,7 +151,79 @@ SQL
         break;
       
       $row_ = array("gid" => intval($row['id']),
-                    "result" => $row['result']);
+                    "result" => $row['result'],
+                    "alpha"=> $row['alpha'],
+                    "beta" => $row['beta']);
+      array_push($rows, $row_);
+    }
+    
+    $retv = array("games"=>$rows);
+    
+    $db->commit();
+  }
+  catch(PDOException $ex) {
+    return array("err"=>"database error");
+  }
+  
+  return $retv;
+}
+
+function hGameList2($d, $uid, $db) {
+  if (!isset($d['uid'])) {
+    $d['uid'] = $uid;
+  }
+  
+  $retv = NULL;
+  
+  try {
+    $db->beginTransaction();
+    $stmt = $db->prepare(
+<<<SQL
+SELECT
+  g1.id AS id,
+  p1.name AS alpha,
+  p2.name AS beta,
+  g1.alpha_civ AS alpha_civ,
+  g1.beta_civ AS beta_civ,
+  g1.created_on AS created_on,
+  g1.result AS result,
+  g1.board AS board,
+  p1.id AS alpha_id,
+  p2.id AS beta_id,
+  g1.poll_alpha AS poll_alpha,
+  g1.poll_beta AS poll_beta,
+  g1.last_fx AS last_fx,
+  g1.last_fy AS last_fy,
+  g1.last_tx AS last_tx,
+  g1.last_ty AS last_ty
+FROM
+  `games` g1
+LEFT JOIN PROFILES
+  p1 ON p1.id = g1.alpha
+LEFT JOIN PROFILES
+  p2 ON p2.id = g1.beta
+WHERE (p1.id = :usrid OR p2.id = :usrid)
+  AND (g1.result != 'v' AND g1.result != 'V')
+ORDER BY g1.created_on DESC
+LIMIT 12
+SQL
+    );
+    $stmt->bindParam(":usrid", intval($d['uid']), PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $rows = array();
+    
+    while(TRUE) {
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      if($row === FALSE)
+        break;
+      
+      $row_ = array("gid" => intval($row['id']),
+                    "result" => $row['result'],
+                    "alpha"=> $row['alpha'],
+                    "beta" => $row['beta'],
+                    "alpha_id" => intval($row['alpha_id']),
+                    "beta_id" => intval($row['beta_id']));
       array_push($rows, $row_);
     }
     
@@ -331,6 +407,9 @@ function hGameMoveInsert($d, $uid, $db, $civ, $fx, $fy, $tx, $ty, $game, $next) 
 }
 
 function hGameMove($d, $uid, $db) {
+  if ($uid == 0)
+    return array("err"=>403);
+  
   if(!isset($d['gid'])) 
     return array("err"=>"Missing `gid`!");
   
@@ -399,6 +478,10 @@ function hGameMove($d, $uid, $db) {
 }
 
 function hGameAck($d, $uid, $db) {
+  if ($uid == 0) {
+    return array("err"=>403);
+  }
+  
   if(!isset($d['gid'])) 
     return array("err"=>"Missing `gid`!");
   
@@ -576,6 +659,9 @@ SQL
 }
 
 function hGameNew($d, $uid, $db) {
+  if ($uid == 0)
+    return array("err"=>403);
+  
   try {
     $db->beginTransaction();
     

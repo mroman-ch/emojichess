@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>EmojiChess - Lobby</title>
+  <title>EmojiChess - Login</title>
   <link rel="stylesheet" href="stylesheet.css">
   <script type="text/javascript" src="ecapi.js"></script>
-  <script type="text/javascript" src="lobby.js"></script>
+  <script type="text/javascript" src="profile.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -13,13 +13,22 @@
 <body onload="defaultInit(); init();">
 <div id="container">
 <header>
-Lobby
+Profile
 </header>
 <main>
-<div id="nav">
+<div id="nav"></div>
+<div class="title">
+Profile picture
 </div>
-<div id="lobby">
+<div class="center-center" style="font-size: 10rem;">
+&#x1F354;
 </div>
-<button onclick="newGame()">Create Game</button>
+<div class="title">
+Games requiring your attention
+</div>
+<div id="current-games">
+</div>
+</main>
+</div>
 </body>
 </html>

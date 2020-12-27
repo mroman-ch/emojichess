@@ -118,6 +118,7 @@ function updateBoardDisplay(game) {
   G_ALPHA_CIV = game['alpha_civ'];
   G_BETA_CIV = game['beta_civ'];
   G_BOARD = boardTo2D(game['board']);
+  G_LAST_MOVE = [game['last_move']['ty'],game['last_move']['tx'],game['last_move']['fy'],game['last_move']['fx']];
   
   document.getElementById("board").innerHTML = 
     renderBoardTable(G_BOARD, G_ALPHA_CIV, G_BETA_CIV);

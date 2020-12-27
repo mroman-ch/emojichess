@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>EmojiChess</title>
+  <title>EmojiChess - VS</title>
   <link rel="stylesheet" href="stylesheet.css">
   <script type="text/javascript" src="stuckfish.js"></script>
   <script type="text/javascript" src="ecapi.js"></script>
@@ -11,12 +11,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"> 
 </head>
-<body onload="init()">
+<body onload="defaultInit(); init();">
 <div id="container">
 <header>
-EmojiChess
+Player vs. Player
 </header>
 <main>
+<div id="nav">
+</div>
 <div id="beta" class="plr">
 <span style="color: cornflowerblue"><span id="beta_plr"></span></span>
 </div>
@@ -27,7 +29,6 @@ EmojiChess
 </div>
 <pre id="ecapi-console"></pre>
 <br><br>
-<b>ECAPI-KEY:</b> <input type="text" id="ecapi-key" /> <button onclick="localStorage.setItem('ecapi-key', document.getElementById('ecapi-key').value); return false;">Set!</button>
 </div>
 </body>
 </html>

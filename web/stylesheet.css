@@ -164,9 +164,30 @@ button {
   padding: 0.35rem;
   font-size: 1.25rem;
   border: solid 0.2rem #606060;
+  margin-top: 0.5rem;
 }
 
 button:hover {
+  color: #CCCC50;
+  cursor: pointer;
+  border: solid 0.2rem #BBBB20;
+}
+
+.buttonish {
+  background-color: #101010;
+  color: #BBBB20;
+  padding: 0.35rem;
+  font-size: 1.25rem;
+  border: solid 0.2rem #606060;
+}
+
+input {
+  background-color: #121212;
+  color: #BBBBBB;
+  padding: 0.25rem;
+}
+
+.buttonish:hover {
   color: #CCCC50;
   cursor: pointer;
   border: solid 0.2rem #BBBB20;
@@ -187,4 +208,5 @@ button.big {
 #nav {
   background-color: #505050;
   padding: 0.5rem;
+  margin-bottom: 1rem;
 }

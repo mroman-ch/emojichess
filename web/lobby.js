@@ -1,5 +1,5 @@
 function newGame() {
-  ecApi.go({"p":"game","a":"new","d":{}}, alert, alert);
+  ecApi.go({"p":"game","a":"new","d":{}}, init, alert);
 }
 
 function init() {
@@ -26,7 +26,7 @@ function join(gid) {
 function joinSuccess(reply) {
   if (reply['err'] != 0) {
     if (reply['err'] == 403) {
-      alert("You can not join this game. Maybe it's because you're already in it!");
+      alert("You can not join this game. ");
       return false;
     }
     alert("There was an error: " + reply['err']);

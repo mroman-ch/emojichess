@@ -33,16 +33,16 @@ function defaultSuccess(reply) {
   
   if (d != null && d != undefined) {
     if (reply['uid'] != 0) {
-      d.innerHTML  += " | My Profile";
+      d.innerHTML  += ' | <a href="profile.html#' + reply['uid'] + '">My Profile</a>';
     } else {
-      d.innerText += " | (not logged in)";
+      d.innerHTML += ' | <a href="login.html">Login</a> (not logged in)';
     }
   }
 }
 
 function defaultInit() {
   var d = document.getElementById("nav");
-  d.innerHTML += '<a href="rules.html">Rules</a> | <a href="https://github.com/mroman-ch/emojichess">Github</a>';
+  d.innerHTML = '<a href="index.html">Home</a> | <a href="rules.html">Rules</a> | <a href="train.html">Train</a> | <a href="lobby.html">Lobby</a> | <a href="https://github.com/mroman-ch/emojichess">Github</a>';
   
   ecApi.go({"p":"default","a":"","d":{}}, defaultSuccess, alert);
 }

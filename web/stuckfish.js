@@ -448,16 +448,18 @@ function analyse (b2d, alpha_civ, beta_civ) {
           ptrn_cap[i][1] *= t0dir;
         }
       }
-      
-      if (tier == 0) {
-          if (civ == alpha_civ && y == 6)
-            range *= 2;
-          if (civ == beta_civ && y == 1)
-            range *= 2;
-      }
-      
+
       for(var i = 0; i < ptrn_move.length; i++) {
-        for(var dr = 1; dr <= range; dr++) {
+        var range_ = range;
+        
+        if (tier == 0) {
+          if (civ == alpha_civ && y == 6)
+            range_ = range*2;
+          if (civ == beta_civ && y == 1)
+            range_ = range*2;
+        }
+        
+        for(var dr = 1; dr <= range_; dr++) {
           
           var ty = y + ptrn_move[i][1]*dr;
           var tx = x + ptrn_move[i][0]*dr;

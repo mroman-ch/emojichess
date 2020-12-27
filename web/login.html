@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>EmojiChess - Lobby</title>
+  <title>EmojiChess - Login</title>
   <link rel="stylesheet" href="stylesheet.css">
   <script type="text/javascript" src="ecapi.js"></script>
-  <script type="text/javascript" src="lobby.js"></script>
+  <script type="text/javascript" src="login.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"> 
 </head>
-<body onload="defaultInit(); init();">
+<body onload="defaultInit(); ">
 <div id="container">
 <header>
-Lobby
+Login
 </header>
 <main>
-<div id="nav">
+<div id="nav"></div>
+<form onsubmit="login(); return false;">
+<table>
+<tr><td><b>Name</b></td><td><b>Password</b></td></tr>
+<tr><td><input id="name" type="text"/></td><td><input id="password" type="password"/></td></tr>
+</table>
+<input class="buttonish" type="submit" value="Login"/>
+</form>
+</main>
 </div>
-<div id="lobby">
-</div>
-<button onclick="newGame()">Create Game</button>
 </body>
 </html>
